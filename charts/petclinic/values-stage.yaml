@@ -1,0 +1,9 @@
+replicas: 3
+
+service:
+  main:
+    type: LoadBalancer
+    ports: 
+       http:
+        port: 80
+        targetPort: 8080
