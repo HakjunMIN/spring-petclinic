@@ -54,7 +54,6 @@ stages:
         tasks: 'build'
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
-        tasks: 'build -x test'
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: 1.11
         codeCoverageTool: 'jacoco'
