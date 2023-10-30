@@ -48,38 +48,19 @@ stages:
     displayName: Build
       
     steps:
-    - task: AzureKeyVault@1
-      inputs:
-        azureSubscription: 'aks-connect'              
-        KeyVaultName: 'kvspr'               
-        SecretsFilter: 'sonar-url, sonar-token'                    
-        RunAsPreJob: false         
-    - task: Cache@2
-      displayName: Cache Maven local repo  
-      inputs:
-        key: 'maven | "$(Agent.OS)" | pom.xml'
-        restoreKeys: |
-          maven | "$(Agent.OS)" 
-          maven
-        path: $(MAVEN_CACHE_FOLDER) 
-
-    - task: Maven@4
-      displayName: Maven Build and SonarQube Analysis
-      inputs:
-        mavenPomFile: 'pom.xml'
+    - task: Gradle@3
+      inputs:       
+        gradleWrapperFile: 'gradlew'
+        tasks: 'build'
         publishJUnitResults: true
-        codeCoverageTool: 'jacoco'
-        codeCoverageClassFilesDirectories:  'target/classes, target/testClasses'
-        codeCoverageSourceDirectories: 'src/java, src/test'
+        testResultsFiles: '**/TEST-*.xml'
+        tasks: 'build -x test'
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: 1.11
-        mavenVersionOption: 'Default'
-        mavenOptions: '$(MAVEN_OPTS)'
-        mavenAuthenticateFeed: false
-        effectivePomSkip: false
-        options: "-Dsonar.projectKey=petclinic-monolith -Dsonar.host.url=$(sonar-url) -Dsonar.login=$(sonar-token)"
-        goals: "-B verify sonar:sonar"
-
+        codeCoverageTool: 'jacoco'
+        codeCoverageClassFilesDirectories:  'target/classes, target/testClasses'
+        codeCoverageSourceDirectories: 'src/main/java, src/test/java'
+    
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
@@ -114,11 +95,6 @@ stages:
       runOnce:
         deploy:
           steps:
-          # - task: Bash@3    
-          #   inputs: 
-          #     targetType: inline
-          #     script: |
-          #       kubectl get ns
           - task: HelmDeploy@0
             inputs:
               connectionType: 'Kubernetes Service Connection'
@@ -128,6 +104,6 @@ stages:
               chartType: Name
               chartName: '$(Pipeline.Workspace)/charts/petclinic'
               # valueFile: '$(Pipeline.Workspace)/charts/petclinic/values.yaml'
-              # overrideFiles: '$(Pipeline.Workspace)/charts/petclinic/values-stage.yaml'
+              overrideFiles: '$(Pipeline.Workspace)/charts/petclinic/values-stage.yaml'
               releaseName: 'petclinic-dev'
               # arguments: '--create-namespace'
