@@ -55,7 +55,7 @@ stages:
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
         javaHomeOption: 'JDKVersion'
-        jdkVersionOption: 1.11
+        jdkVersionOption: 1.17
         codeCoverageTool: 'jacoco'
         codeCoverageClassFilesDirectories:  'target/classes, target/testClasses'
         codeCoverageSourceDirectories: 'src/main/java, src/test/java'
