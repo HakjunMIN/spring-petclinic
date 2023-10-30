@@ -56,7 +56,7 @@ stages:
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: 1.17
         codeCoverageTool: 'jacoco'
-        codeCoverageClassFilesDirectories:  'build/classes/main, build/classes/test'
+        codeCoverageClassFilesDirectories:  'build/classes/java/main, build/classes/java/test'
         codeCoverageSourceDirectories: 'src/main/java, src/test/java'
     
     - task: Docker@2
