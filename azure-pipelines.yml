@@ -45,8 +45,7 @@ stages:
   displayName: Build stage
   jobs:
   - job: Build
-    displayName: Build
-      
+    displayName: Build      
     steps:
     - task: Gradle@3
       inputs:       
@@ -57,7 +56,7 @@ stages:
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: 1.17
         codeCoverageTool: 'jacoco'
-        codeCoverageClassFilesDirectories:  'target/classes, target/testClasses'
+        codeCoverageClassFilesDirectories:  'build/classes/main, build/classes/test'
         codeCoverageSourceDirectories: 'src/main/java, src/test/java'
     
     - task: Docker@2
