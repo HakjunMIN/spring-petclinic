@@ -56,8 +56,8 @@ stages:
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: 1.17
         codeCoverageTool: 'jacoco'
-        codeCoverageClassFilesDirectories:  'build/classes/java/main, build/classes/java/test'
-        codeCoverageSourceDirectories: 'src/main/java, src/test/java'
+        # codeCoverageClassFilesDirectories:  'build/classes/java/main, build/classes/java/test'
+        # codeCoverageSourceDirectories: 'src/main/java, src/test/java'
     
     - task: Docker@2
       displayName: Build and push an image to container registry
