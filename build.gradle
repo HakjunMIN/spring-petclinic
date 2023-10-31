@@ -46,8 +46,5 @@ tasks.named('test') {
 jacocoTestReport {
 	classDirectories.setFrom fileTree(dir: "build/classes/java/main/").exclude('')
 	classDirectories.setFrom fileTree(dir: "build/classes/java/test/").exclude('')
-  reports {
-    xml.enabled true
-    html.enabled true
-  }
+
 }
