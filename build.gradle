@@ -40,11 +40,10 @@ dependencies {
 
 tasks.named('test') {
   useJUnitPlatform()
-  finalizedBy jacocoTestReport
+  // finalizedBy jacocoTestReport
 }
 
 jacocoTestReport {
 	classDirectories.setFrom fileTree(dir: "build/classes/java/main/").exclude('')
 	classDirectories.setFrom fileTree(dir: "build/classes/java/test/").exclude('')
-
 }

@@ -51,12 +51,12 @@ stages:
       inputs:       
         gradleWrapperFile: 'gradlew'
         tasks: 'build'
-        publishJUnitResults: true
+        publishJUnitResults: true        
         testResultsFiles: '**/TEST-*.xml'
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: 1.17
-        codeCoverageTool: 'jacoco'
-        codeCoverageEnabled: true
+        # codeCoverageTool: 'jacoco'
+        # codeCoverageEnabled: true
         # codeCoverageClassFilesDirectories:  'build/classes/java/main, build/classes/java/test'
         # codeCoverageSourceDirectories: 'src/main/java, src/test/java'
         # codeCoverageReportDirectory: 'build/jacoco'
@@ -87,32 +87,33 @@ stages:
           sed -i 's/tag:.*/tag: $(build.sourceBranchName)/g' charts/*/values*.yaml
           sed -i 's/appVersion:.*/appVersion: $(build.sourceBranchName)/g' charts/*/Chart.yaml
 
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: 'charts'
-        artifact: charts
+    # = task: Git
+    # - task: PublishPipelineArtifact@1
+    #   inputs:
+    #     targetPath: 'charts'
+    #     artifact: charts
 
-- stage: Deploy
-  displayName: Deploy Snapshot to Dev environment
-  dependsOn: Build
-  # condition: contains(variables['build.sourceBranch'], 'SNAPSHOT')
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: 'dev.spring-pets'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: HelmDeploy@0
-            inputs:
-              connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceConnection: 'dev-spring-pets-1698724967311'
-              namespace: 'spring-pets'
-              command: upgrade
-              chartType: Name
-              chartName: '$(Pipeline.Workspace)/charts/petclinic'
-              # valueFile: '$(Pipeline.Workspace)/charts/petclinic/values.yaml'
-              overrideFiles: '$(Pipeline.Workspace)/charts/petclinic/values-stage.yaml'
-              releaseName: 'petclinic-dev'
-              # arguments: '--create-namespace'
+
+# - stage: Deploy
+#   displayName: Deploy Snapshot to Dev environment
+#   dependsOn: Build
+#   # condition: contains(variables['build.sourceBranch'], 'SNAPSHOT')
+#   jobs:
+#   - deployment: Deploy
+#     displayName: Deploy
+#     environment: 'dev.spring-pets'
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - task: HelmDeploy@0
+#             inputs:
+#               connectionType: 'Kubernetes Service Connection'
+#               kubernetesServiceConnection: 'dev-spring-pets-1698724967311'
+#               namespace: 'spring-pets'
+#               command: upgrade
+#               chartType: Name
+#               chartName: '$(Pipeline.Workspace)/charts/petclinic'
+#               overrideFiles: '$(Pipeline.Workspace)/charts/petclinic/values-stage.yaml'
+#               releaseName: 'petclinic-dev'
+#               arguments: '--create-namespace'
