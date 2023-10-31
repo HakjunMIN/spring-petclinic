@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/java/jre-headless:11-zulu-ubuntu
+FROM mcr.microsoft.com/java/jre-headless:17-zulu-ubuntu
 
-COPY ./target/*.jar /app.jar
+COPY ./build/libs/*.jar /app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
