@@ -57,9 +57,9 @@ stages:
         jdkVersionOption: 1.17
         codeCoverageTool: 'jacoco'
         codeCoverageEnabled: true
-        codeCoverageClassFilesDirectories:  'build/classes/java/main, build/classes/java/test'
-        codeCoverageSourceDirectories: 'src/main/java, src/test/java'
-        codeCoverageReportDirectory: 'build/jacoco'
+        # codeCoverageClassFilesDirectories:  'build/classes/java/main, build/classes/java/test'
+        # codeCoverageSourceDirectories: 'src/main/java, src/test/java'
+        # codeCoverageReportDirectory: 'build/jacoco'
 
     # - task: PublishCodeCoverageResults@1
     #   inputs:
