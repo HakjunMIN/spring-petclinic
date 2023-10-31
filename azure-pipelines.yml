@@ -89,7 +89,7 @@ stages:
   jobs:
   - deployment: Deploy
     displayName: Deploy
-    environment: 'dev.monolith'
+    environment: 'dev.spring-pets'
     strategy:
       runOnce:
         deploy:
@@ -97,8 +97,8 @@ stages:
           - task: HelmDeploy@0
             inputs:
               connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceConnection: 'dev-monolith-1697527441977'
-              namespace: 'monolith'
+              kubernetesServiceConnection: 'dev-spring-pets-1698724967311'
+              namespace: 'spring-pets'
               command: upgrade
               chartType: Name
               chartName: '$(Pipeline.Workspace)/charts/petclinic'
