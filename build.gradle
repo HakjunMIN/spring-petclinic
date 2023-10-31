@@ -44,16 +44,19 @@ tasks.named('test') {
 }
 
 jacocoTestReport {
-    doFirst {
-        // The JaCoCo plugin adds a JacocoTaskExtension extension to all tasks of type Test.
-        // Use task state to include or not task execution data 
-        // https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/TaskState.html
-        executionData tasks.withType(Test).findAll { it.state.executed }
-    }
-    reports {
-        xml.enabled true
-        xml.destination file("${jacoco.reportsDir}/all-tests/jacocoAllTestReport.xml")
-        html.enabled true
-        html.destination(file("${jacoco.reportsDir}/all-tests/html"))
-    }
+	classDirectories.setFrom fileTree(dir: "build/classes/java/main/").exclude('').include('')
 }
+// jacocoTestReport {
+//     doFirst {
+//         // The JaCoCo plugin adds a JacocoTaskExtension extension to all tasks of type Test.
+//         // Use task state to include or not task execution data 
+//         // https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/TaskState.html
+//         executionData tasks.withType(Test).findAll { it.state.executed }
+//     }
+//     // reports {
+//     //     xml.enabled true
+//     //     xml.destination file("${jacoco.reportsDir}/all-tests/jacocoAllTestReport.xml")
+//     //     html.enabled true
+//     //     html.destination(file("${jacoco.reportsDir}/all-tests/html"))
+//     // }
+// }
