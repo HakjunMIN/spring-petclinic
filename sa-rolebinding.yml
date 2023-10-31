@@ -1,0 +1,36 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: clusterrole-for-serviceaccount
+rules:
+- apiGroups: ["*","apps","extensions"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: clusterrolebinding-for-serviceaccount
+subjects:
+- kind: ServiceAccount
+  name: aks-connec-sa
+  namespace: spring-pets
+roleRef:
+  kind: ClusterRole
+  name: clusterrole-for-serviceaccount
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aks-connec-sa
+secrets:
+  - name: token-secret
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  name: token-secret
+  annotations:
+    kubernetes.io/service-account.name: "aks-connec-sa"
