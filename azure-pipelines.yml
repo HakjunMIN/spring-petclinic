@@ -103,36 +103,13 @@ stages:
         targetPath: 'charts'
         artifact: charts
 
-# - stage: Deploy
-#   displayName: Deploy Snapshot to Dev environment
-#   dependsOn: Build
-#   # condition: contains(variables['build.sourceBranch'], 'SNAPSHOT')
-#   jobs:
-#   - deployment: Deploy
-#     displayName: Deploy
-#     environment: 'dev.spring-pets'
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - task: HelmDeploy@0
-#             inputs:
-#               connectionType: 'Kubernetes Service Connection'
-#               kubernetesServiceConnection: 'dev-spring-pets-1698724967311'
-#               namespace: 'spring-pets'
-#               command: upgrade
-#               chartType: Name
-#               chartName: '$(Pipeline.Workspace)/charts/petclinic'
-#               overrideFiles: '$(Pipeline.Workspace)/charts/petclinic/values-stage.yaml'
-#               releaseName: 'petclinic-dev'
-#               arguments: '--create-namespace'
-
-- stage: rollback
-  displayName: Rollback
+- stage: Deploy
+  displayName: Deploy Snapshot to Dev environment
+  dependsOn: Build
   # condition: contains(variables['build.sourceBranch'], 'SNAPSHOT')
   jobs:
-  - deployment: Rollback
-    displayName: Rollback
+  - deployment: Deploy
+    displayName: Deploy
     environment: 'dev.spring-pets'
     strategy:
       runOnce:
@@ -143,6 +120,29 @@ stages:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceConnection: 'dev-spring-pets-1698724967311'
               namespace: 'spring-pets'
-              command: rollback
+              command: upgrade
+              chartType: Name
+              chartName: '$(Pipeline.Workspace)/charts/petclinic'
+              overrideFiles: '$(Pipeline.Workspace)/charts/petclinic/values-stage.yaml'
               releaseName: 'petclinic-dev'
+              arguments: '--create-namespace'
+
+# - stage: rollback
+#   displayName: Rollback
+#   # condition: contains(variables['build.sourceBranch'], 'SNAPSHOT')
+#   jobs:
+#   - deployment: Rollback
+#     displayName: Rollback
+#     environment: 'dev.spring-pets'
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - task: HelmDeploy@0
+#             inputs:
+#               connectionType: 'Kubernetes Service Connection'
+#               kubernetesServiceConnection: 'dev-spring-pets-1698724967311'
+#               namespace: 'spring-pets'
+#               command: rollback
+#               releaseName: 'petclinic-dev'
     
