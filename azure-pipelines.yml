@@ -92,12 +92,10 @@ stages:
     - script: |
         git config --global user.email "andrewmin1@outlook.com"
         git config --global user.name "Azure Pipelines"
-        export branch=$(git branch --contains $(build.sourceVersion) | head -n 1 | sed 's/.*origin\///') 
-        echo "branch: $branch"
-        git pull origin $branch
+        git pull origin main
         git add charts/*
         git commit -m "version $(build.sourceBranchName) to Charts"
-        git push origin HEAD:$branch
+        git push origin HEAD:main
       displayName: 'Commit for GitOps'
       workingDirectory: $(build.SourcesDirectory)
 
