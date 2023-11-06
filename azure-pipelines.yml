@@ -92,6 +92,7 @@ stages:
     - script: |
         git config --global user.email "andrewmin1@outlook.com"
         git config --global user.name "Azure Pipelines"
+        git pull origin $(build.SourceBranchName)
         git add charts/*
         git commit -m "version $(build.sourceBranchName) to Charts"
         git push origin HEAD:$(build.SourceBranchName)
