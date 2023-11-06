@@ -144,8 +144,5 @@ stages:
               kubernetesServiceConnection: 'dev-spring-pets-1698724967311'
               namespace: 'spring-pets'
               command: rollback
-              chartType: Name
-              chartName: '$(Pipeline.Workspace)/charts/petclinic'
-              overrideFiles: '$(Pipeline.Workspace)/charts/petclinic/values-stage.yaml'
               releaseName: 'petclinic-dev'
     
