@@ -87,12 +87,13 @@ stages:
           sed -i 's/tag:.*/tag: $(build.sourceBranchName)/g' charts/*/values*.yaml
           sed -i 's/appVersion:.*/appVersion: $(build.sourceBranchName)/g' charts/*/Chart.yaml
 
-    # = task: Git
-    # - task: PublishPipelineArtifact@1
-    #   inputs:
-    #     targetPath: 'charts'
-    #     artifact: charts
-
+    - script: |
+        git config --global user.email "andrewmin1@outlook.com"
+        git config --global user.name "Azure Pipelines"
+        git add .
+        git commit -m "version $(build.sourceBranchName) to Charts"
+        git push origin $(Build.SourceBranchName)
+      displayName: 'Commit for GitOps'
 
 # - stage: Deploy
 #   displayName: Deploy Snapshot to Dev environment
