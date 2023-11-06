@@ -92,7 +92,7 @@ stages:
     - script: |
         git config --global user.email "andrewmin1@outlook.com"
         git config --global user.name "Azure Pipelines"
-        export branch=$(git branch -r --contains $(build.sourceVersion) | head -n 1 | sed 's/.*origin\///') 
+        export branch=$(git branch --contains $(build.sourceVersion) | head -n 1 | sed 's/.*origin\///') 
         echo "branch: $branch"
         git pull origin $branch
         git add charts/*
