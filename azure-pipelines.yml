@@ -94,9 +94,10 @@ stages:
         git config --global user.name "Azure Pipelines"
         git add charts/*
         git commit -m "version $(build.sourceBranchName) to Charts"
-        git push origin $(Build.SourceBranchName)
+        echo $(build.SourceBranchName)
+        git push origin $(build.SourceBranchName)
       displayName: 'Commit for GitOps'
-      workingDirectory: $(Build.SourcesDirectory)
+      workingDirectory: $(build.SourcesDirectory)
 
 # - stage: Deploy
 #   displayName: Deploy Snapshot to Dev environment
