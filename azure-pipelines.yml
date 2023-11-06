@@ -15,8 +15,8 @@ trigger:
     - '*.md'
     - 'img/*'
 
-resources:
-- repo: self
+# resources:
+# - repo: self
 
 pool:
   name: agents2
@@ -47,6 +47,8 @@ stages:
   - job: Build
     displayName: Build      
     steps:
+    - checkout: self
+      persistCredentials: true
     - task: Gradle@3
       inputs:       
         gradleWrapperFile: 'gradlew'
