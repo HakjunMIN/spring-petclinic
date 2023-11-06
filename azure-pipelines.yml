@@ -81,44 +81,44 @@ stages:
     #     tags: |
     #       $(build.sourceBranchName)  
     
-    - task: Bash@3    
-      displayName: 'Update version to Helm Charts'
-      inputs: 
-        targetType: inline
-        script: |
-          sed -i 's/tag:.*/tag: $(build.sourceBranchName)/g' charts/*/values*.yaml
-          sed -i 's/appVersion:.*/appVersion: $(build.sourceBranchName)/g' charts/*/Chart.yaml
+    # - task: Bash@3    
+    #   displayName: 'Update version to Helm Charts'
+    #   inputs: 
+    #     targetType: inline
+    #     script: |
+    #       sed -i 's/tag:.*/tag: $(build.sourceBranchName)/g' charts/*/values*.yaml
+    #       sed -i 's/appVersion:.*/appVersion: $(build.sourceBranchName)/g' charts/*/Chart.yaml
     
-    - script: |
-        git config --global user.email "andrewmin1@outlook.com"
-        git config --global user.name "Azure Pipelines"
-        git pull origin main
-        git add charts/*
-        git commit -m "version $(build.sourceBranchName) to Charts"
-        git push origin HEAD:main
-      displayName: 'Commit for GitOps'
-      workingDirectory: $(build.SourcesDirectory)
+    # - script: |
+    #     git config --global user.email "andrewmin1@outlook.com"
+    #     git config --global user.name "Azure Pipelines"
+    #     git pull origin main
+    #     git add charts/*
+    #     git commit -m "version $(build.sourceBranchName) to Charts"
+    #     git push origin HEAD:main
+    #   displayName: 'Commit for GitOps'
+    #   workingDirectory: $(build.SourcesDirectory)
 
-# - stage: Deploy
-#   displayName: Deploy Snapshot to Dev environment
-#   dependsOn: Build
-#   # condition: contains(variables['build.sourceBranch'], 'SNAPSHOT')
-#   jobs:
-#   - deployment: Deploy
-#     displayName: Deploy
-#     environment: 'dev.spring-pets'
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - task: HelmDeploy@0
-#             inputs:
-#               connectionType: 'Kubernetes Service Connection'
-#               kubernetesServiceConnection: 'dev-spring-pets-1698724967311'
-#               namespace: 'spring-pets'
-#               command: upgrade
-#               chartType: Name
-#               chartName: '$(Pipeline.Workspace)/charts/petclinic'
-#               overrideFiles: '$(Pipeline.Workspace)/charts/petclinic/values-stage.yaml'
-#               releaseName: 'petclinic-dev'
-#               arguments: '--create-namespace'
+- stage: Deploy
+  displayName: Deploy Snapshot to Dev environment
+  dependsOn: Build
+  # condition: contains(variables['build.sourceBranch'], 'SNAPSHOT')
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: 'dev.spring-pets'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: HelmDeploy@0
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceConnection: 'dev-spring-pets-1698724967311'
+              namespace: 'spring-pets'
+              command: upgrade
+              chartType: Name
+              chartName: '$(Pipeline.Workspace)/charts/petclinic'
+              overrideFiles: '$(Pipeline.Workspace)/charts/petclinic/values-stage.yaml'
+              releaseName: 'petclinic-dev'
+              arguments: '--create-namespace'
