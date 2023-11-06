@@ -147,5 +147,5 @@ stages:
               chartType: Name
               chartName: '$(Pipeline.Workspace)/charts/petclinic'
               overrideFiles: '$(Pipeline.Workspace)/charts/petclinic/values-stage.yaml'
-              releaseName: 'petclinic-dev 0'
+              releaseName: 'petclinic-dev'
     
