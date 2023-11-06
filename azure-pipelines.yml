@@ -144,6 +144,6 @@ stages:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceConnection: 'dev-spring-pets-1698724967311'
               namespace: 'spring-pets'
-          - script: |
-              helm rollback petclinic-dev 0
-  
+              command: rollback
+              arguments: 'petclinic-dev 0'
+    
