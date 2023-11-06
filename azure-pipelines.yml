@@ -91,7 +91,8 @@ stages:
     - script: |
         git config --global user.email "andrewmin1@outlook.com"
         git config --global user.name "Azure Pipelines"
-        branch=$(git branch -r --contains $(Build.SourceBranchName) | grep -v $(Build.SourceVersion) | head -n 1 | sed 's/.*origin\///')
+        branch=$(git branch -r --contains $(Build.SourceBranchName) | grep -v $(Build.SourceVersion))
+        echo $branch
         git pull origin $branch
         git add charts/*
         git commit -m "version $(build.sourceBranchName) to Charts"
