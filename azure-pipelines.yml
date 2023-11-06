@@ -46,7 +46,8 @@ stages:
     displayName: Build      
     steps:
     - checkout: self
-      persistCredentials: true
+      persistCredentials: 'true'
+    
     # - task: Gradle@3
     #   inputs:       
     #     gradleWrapperFile: 'gradlew'
@@ -91,7 +92,7 @@ stages:
     - script: |
         git config --global user.email "andrewmin1@outlook.com"
         git config --global user.name "Azure Pipelines"
-        export branch=$(git branch -r --contains 0.0.1-SNAPSHOT | head -n 1 | sed 's/.*origin\///') 
+        export branch=$(git branch -r --contains $(build.sourceVersion) | head -n 1 | sed 's/.*origin\///') 
         echo "branch: $branch"
         git pull origin $branch
         git add charts/*
