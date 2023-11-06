@@ -37,9 +37,7 @@ variables:
   # Maven Caching
   MAVEN_CACHE_FOLDER: $(Pipeline.Workspace)/.m2/repository
   MAVEN_OPTS: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
-  # Agent VM image name
-  # vmImageName: 'ubuntu-latest'
-
+  
 stages:
 - stage: Build
   displayName: Build stage
@@ -83,19 +81,21 @@ stages:
           $(build.sourceBranchName)  
     
     - task: Bash@3    
+      displayName: 'Update version to Helm Charts'
       inputs: 
         targetType: inline
         script: |
           sed -i 's/tag:.*/tag: $(build.sourceBranchName)/g' charts/*/values*.yaml
           sed -i 's/appVersion:.*/appVersion: $(build.sourceBranchName)/g' charts/*/Chart.yaml
-
+    
     - script: |
         git config --global user.email "andrewmin1@outlook.com"
         git config --global user.name "Azure Pipelines"
-        git pull origin $(build.SourceBranchName)
+        $branch = git branch -r --contains $(Build.SourceBranchName) | grep -v $(Build.SourceVersion) | head -n 1 | sed 's/.*origin\///'
+        git pull origin $branch
         git add charts/*
         git commit -m "version $(build.sourceBranchName) to Charts"
-        git push origin HEAD:$(build.SourceBranchName)
+        git push origin HEAD:$branch
       displayName: 'Commit for GitOps'
       workingDirectory: $(build.SourcesDirectory)
 
