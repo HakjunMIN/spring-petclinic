@@ -13,8 +13,8 @@ metadata:
   name: clusterrolebinding-for-serviceaccount
 subjects:
 - kind: ServiceAccount
-  name: aks-connec-sa
-  namespace: spring-pets
+  name: aks-connect-sa
+  namespace: spring
 roleRef:
   kind: ClusterRole
   name: clusterrole-for-serviceaccount
@@ -23,7 +23,7 @@ roleRef:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: aks-connec-sa
+  name: aks-connect-sa
 secrets:
   - name: token-secret
 ---
@@ -33,4 +33,4 @@ type: kubernetes.io/service-account-token
 metadata:
   name: token-secret
   annotations:
-    kubernetes.io/service-account.name: "aks-connec-sa"
+    kubernetes.io/service-account.name: "aks-connect-sa"
