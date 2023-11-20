@@ -10,18 +10,25 @@
 
 ![Pipeline with ArgoCD](./images/azpipelinewithargocd.png)
 
+## 코드 준비
+
+* https://github.com/HakjunMIN/spring-petclinic 클론 후 .git 삭제
+* onprem github에 리파지토리 생성 후 remote설정
+
 ## Onprem GitHub 연계
 
 1. Pipeline > New Pipeline > `native Azure DevOps experience`
 2. `Github Enterprise Server` > 기존 연결 사용 > All repositories > 리파지토리 선택 > Save
-3. `azure-pipelines.yml` 편집
+3. `azure-pipelines.yml` 편집 > RUN하지 말고 SAVE
 
 ## TO-DO
 
-1. 서비스 커넥션 설정
-    * SA생성 후 Cluster Role, Cluster Role Binding, SA의 Token생성
-        [파일 참고](./sa-rolebinding.yml), SA의 네임스페이스 변경
+1. Kubernetes 서비스 커넥션 설정
+    * Cluster Role, Cluster Role Binding 생성
+        [파일 참고](./sa-rolebinding.yml)
+    * 네임스페이스 별 SA및 SA secret 생성
     * Environment에서 정의 후 자동생성되는 Connection사용
+        * Environment 및 Resource생성
     * Generic Provider Kubernetes Service Account 
     * Server URL: https://spr-cluster-dns-34b18e0f.hcp.koreacentral.azmk8s.io:443
     * `Accept untrusted certificates` 선택
@@ -36,7 +43,7 @@
 
 4. 기본환경 설정
 
-    * 아래 imageRepository 변경 예: `andy/spring-petclinic`
+    * 이미지 리파지토리는 각자의 namespace로 만들 것. 아래 imageRepository 변경 예: `ns1/spring-petclinic`
 
     ```yml
     resources:
@@ -117,6 +124,8 @@
 
         * 조건을 넣어서 특정 버저닝에만 배포되도록 설정 가능 예: `condition: contains(variables['build.sourceBranch'], 'SNAPSHOT')`
 
+        * 아래 yaml파일에서 namespace를 변경해줘야 함. 
+
         <details>
         <summary>코드보기</summary>
 
@@ -146,6 +155,10 @@
                         arguments: '--create-namespace'
         ```
         </details>
+
+    * 승인 프로세스 넣기
+
+        * environment내 Approval 기능 활용    
 
     * Rollback 스테이지
 
@@ -184,7 +197,7 @@
     <details>
     <summary>코드보기</summary>
 
-        ```yml
+    ```yml
         - script: |
             git config --global user.email $(gituserEmail)
             git config --global user.name $(gituserName)
@@ -195,7 +208,7 @@
         displayName: 'Commit for GitOps'
         workingDirectory: $(build.SourcesDirectory)
         
-        ```
+    ```
     </details>
 
     * Rollback은 GitOps툴에서 실행
@@ -212,17 +225,20 @@
         * General 항목 적절히 
         * Source선택, Path는 manifest나 chart있는 디렉토리 탐지됨.
         * Destination URL는 Cluster URL입력, 배포될 Namespace
+        
             > [!IMPORTANT]
             > cluster내에 namespace 생성
 
         * Helm은 value의 순서대로 차례로 반영. 뒤에 파일이 앞에 파일로 Override
         * Value수동 업데이트 시 Values파라미터 사용
         
-        ![샘플](./images/argo-app.png)
+    ![샘플](./images/argo-app.png)
 
     * 생성된 App을 열어 `SYNC`를 통해 배포한 후 배포된 앱 모니터링
 
     ![샘플](./images/app-sync.png)
+
+    * 배포 이후 `History and Rollback`기능을 이용하여 이력 조회 및 Rollback처리
 
 
 
